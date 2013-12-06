@@ -14,15 +14,17 @@ public class DiamondOperatorTest {
 
 	@Test
 	public void createMapOfValuesTest() throws IOException {
-		Map<Integer, List<String>> map1 = createMapOfValuesInOlderJava(0, 1, 2,
-				3);
-		Map<Integer, List<String>> map2 = createMapOfValuesInJava7(0, 1, 2, 3);
+		final Map<Integer, List<String>> map1 = createMapOfValuesInOlderJava(0,
+				1, 2, 3);
+		final Map<Integer, List<String>> map2 = createMapOfValuesInJava7(0, 1,
+				2, 3);
 		Assert.assertEquals(getListOfValuesInOlderJava(), map1.get(0));
 		Assert.assertEquals(getListOfValuesInJava7(), map2.get(0));
 	}
 
 	private Map<Integer, List<String>> createMapOfValuesInOlderJava(
 			final int... keys) {
+
 		final Map<Integer, List<String>> map = new HashMap<Integer, List<String>>();
 		for (final int key : keys) {
 			map.put(key, getListOfValuesInOlderJava());

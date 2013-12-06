@@ -12,11 +12,11 @@ public class StringsInSwitchTest {
 	}
 
 	public String getRowColorInOlderJava(final String state) {
-		if (state.equals("correct")) {
+		if ("correct".equals(state)) {
 			return "green";
-		} else if (state.equals("incorrect") || state.equals("no data")) {
+		} else if ("incorrect".equals(state) || "no data".equals(state)) {
 			return "red";
-		} else if (state.equals("incomplete")) {
+		} else if ("incomplete".equals(state)) {
 			return "yellow";
 		} else {
 			return "white";

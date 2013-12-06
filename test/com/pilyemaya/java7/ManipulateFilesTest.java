@@ -38,7 +38,7 @@ public class ManipulateFilesTest {
 
 	@Test
 	public void infoWithPathTest() throws IOException {
-		Path path = Paths.get(PATH_STRING);
+		final Path path = Paths.get(PATH_STRING);
 		Assert.assertEquals(Paths.get("file.txt"), path.getFileName());
 		// a position of path
 		Assert.assertEquals(Paths.get("Users"), path.getName(0));
@@ -58,13 +58,13 @@ public class ManipulateFilesTest {
 		Assert.assertEquals(true, path.startsWith("C:\\Users"));
 
 		// Iterable y comparable
-		for (Path name : path) {
+		for (final Path name : path) {
 			System.out.println(name);
 		}
 	}
 
 	public File newFileInOlderJava(final String pathString) throws IOException {
-		File file = new File(pathString);
+		final File file = new File(pathString);
 		if (file.createNewFile()) {
 			System.out.println("Fichero creado correctamente");
 		} else {
@@ -74,12 +74,12 @@ public class ManipulateFilesTest {
 	}
 
 	public Path newFileInJava7(final String pathString) throws IOException {
-		Path ruta = Paths.get(pathString);
+		final Path ruta = Paths.get(pathString);
 		return Files.createFile(ruta);
 	}
 
 	public void deleteFileInJava7(final String pathString) throws IOException {
-		Path ruta = Paths.get(pathString);
+		final Path ruta = Paths.get(pathString);
 		Files.delete(ruta);
 		Files.deleteIfExists(ruta);
 	}
@@ -92,14 +92,14 @@ public class ManipulateFilesTest {
 			bw.newLine();
 			bw.write("Older Java: This is second line");
 			bw.newLine();
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			e.printStackTrace();
 		} finally {
 			try {
 				if (bw != null) {
 					bw.close();
 				}
-			} catch (IOException ex) {
+			} catch (final IOException ex) {
 				System.out.println("Older Java: Error writing file");
 			}
 		}
@@ -113,7 +113,7 @@ public class ManipulateFilesTest {
 			writer.append("Java 7: This is second line");
 			writer.newLine();
 			writer.flush();
-		} catch (IOException exception) {
+		} catch (final IOException exception) {
 			System.out.println(" Java 7:Error writing to file");
 		}
 	}
@@ -127,14 +127,14 @@ public class ManipulateFilesTest {
 			while ((content = br.readLine()) != null) {
 				System.out.println(content);
 			}
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			e.printStackTrace();
 		} finally {
 			try {
 				if (br != null) {
 					br.close();
 				}
-			} catch (IOException ex) {
+			} catch (final IOException ex) {
 				System.out.println("Error reading file");
 			}
 		}
@@ -149,7 +149,7 @@ public class ManipulateFilesTest {
 			while ((lineFromFile = reader.readLine()) != null) {
 				System.out.println(lineFromFile);
 			}
-		} catch (IOException exception) {
+		} catch (final IOException exception) {
 			System.out.println("Error reading file");
 		}
 	}
