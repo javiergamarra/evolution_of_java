@@ -15,7 +15,7 @@ public class TryWithResourcesTest {
 		Assert.assertEquals(true, newFileInJava7());
 	}
 
-	public boolean newFileInJava7() throws IOException {
+	public boolean newFileInJava7() {
 		boolean result = false;
 		try (FileOutputStream fos = new FileOutputStream("path.txt");
 				DataOutputStream dos = new DataOutputStream(fos);) {
@@ -28,7 +28,7 @@ public class TryWithResourcesTest {
 		return result;
 	}
 
-	public boolean newFileInOlderJava() throws IOException {
+	public boolean newFileInOlderJava() {
 		boolean result = false;
 		FileOutputStream fos = null;
 		DataOutputStream dos = null;
