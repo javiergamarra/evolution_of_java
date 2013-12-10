@@ -9,7 +9,7 @@ public class EnumTest {
 
 	@Test
 	public void estadoActivoTest() {
-		estadoAyuda=EstadoAyuda.CONCEDIDA;
+		estadoAyuda = EstadoAyuda.CONCEDIDA;
 		Assert.assertEquals("GREEN", estadoAyuda.getColor());
 	}
 

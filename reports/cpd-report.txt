@@ -1,0 +1,23 @@
+Found a 8 line (43 tokens) duplication in the following files: 
+Starting at line 17 of D:\dev\workspace\evolution_of_java\test\com\pilyemaya\java7\MultiCatchTest.java
+Starting at line 34 of D:\dev\workspace\evolution_of_java\test\com\pilyemaya\java7\MultiCatchTest.java
+
+	public double divideWithSingleCatch(final String number1,
+			final String number2) {
+		double result = 0d;
+		try {
+			int a = Integer.parseInt(number1);
+			int b = Integer.parseInt(number2);
+			result = a / b;
+		} catch (NumberFormatException ex1) {
+=====================================================================
+Found a 6 line (29 tokens) duplication in the following files: 
+Starting at line 22 of D:\dev\workspace\evolution_of_java\test\com\pilyemaya\java7\TryWithResourcesTest.java
+Starting at line 39 of D:\dev\workspace\evolution_of_java\test\com\pilyemaya\java7\TryWithResourcesTest.java
+
+			dos.writeBytes("prueba");
+			dos.writeBytes("\r\n");
+			result = true;
+		} catch (final IOException e) {
+			e.printStackTrace();
+		}
