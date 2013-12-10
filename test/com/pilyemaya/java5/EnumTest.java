@@ -5,12 +5,12 @@ import org.junit.Test;
 
 public class EnumTest {
 
-	private EstadoAyuda estadoAyuda;
+	private State state;
 
 	@Test
-	public void estadoActivoTest() {
-		estadoAyuda=EstadoAyuda.CONCEDIDA;
-		Assert.assertEquals("GREEN", estadoAyuda.getColor());
+	public void correctStateTest() {
+		state=State.CORRECT;
+		Assert.assertEquals("GREEN", state.getColor());
 	}
 
 }
