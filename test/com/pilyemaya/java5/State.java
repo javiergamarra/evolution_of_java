@@ -26,7 +26,7 @@ public enum State {
 		return color;
 	}
 
-	public static List<State> obtenerValoresEstadoAyuda() {
+	public static List<State> getStateValues() {
 		return Arrays.asList(INCOMPLETE,CORRECT, INCORRECT);
 	}
 
