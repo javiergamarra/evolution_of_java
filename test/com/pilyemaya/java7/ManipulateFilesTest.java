@@ -16,7 +16,7 @@ import org.junit.Test;
 
 public class ManipulateFilesTest {
 
-	private static final String PATH_STRING = "C:\\Users/Pili/Documents/file.txt";
+	private static final String PATH_STRING = "C:\\Users\\nhpatt\\Documents\\file.txt";
 
 	@Test
 	public void manipulateFilesInOlderJavaTest() throws IOException {
@@ -45,16 +45,16 @@ public class ManipulateFilesTest {
 		// number elements of path
 		Assert.assertEquals(4, path.getNameCount());
 		// sequence of path
-		Assert.assertEquals(Paths.get("Users/Pili"), path.subpath(0, 2));
+		Assert.assertEquals(Paths.get("Users\\nhpatt"), path.subpath(0, 2));
 		// parent directory
-		Assert.assertEquals(Paths.get("C:\\Users/Pili/Documents"),
+		Assert.assertEquals(Paths.get("C:\\Users\\nhpatt\\Documents"),
 				path.getParent());
 		// root
 		Assert.assertEquals(Paths.get("C:\\"), path.getRoot());
 
 		// compare methods
 		Assert.assertEquals(false,
-				path.equals(Paths.get("C:\\Users/Pili/Documents/file3.txt")));
+				path.equals(Paths.get("C:\\Users\\nhpatt\\Documents\\file3.txt")));
 		Assert.assertEquals(true, path.startsWith("C:\\Users"));
 
 		// Iterable y comparable
