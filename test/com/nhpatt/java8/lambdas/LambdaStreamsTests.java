@@ -202,9 +202,6 @@ public class LambdaStreamsTests {
 
 	@Test
 	public void youAreSoEagerTest() {
-		List<Integer> numbers = Arrays
-				.asList(new Integer[] { 1, 2, 3, 4, 5, 6 });
-
 		List<Integer> evenNumbers = new ArrayList<>();
 		for (int n : numbers) {
 			if (isEven(n)) {
@@ -254,5 +251,6 @@ public class LambdaStreamsTests {
 				.findFirst();
 
 		System.out.println("first number is " + result.getAsInt());
+		assertThat(result.getAsInt(), equalTo(8));
 	}
 }
