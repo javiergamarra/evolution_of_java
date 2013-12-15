@@ -7,6 +7,6 @@ public interface CalculatorInterfacePreJava8 {
 	Integer add(Integer x, Integer y);
 
 	// WTF do u think you are doing?
-	// static Integer convert(final Integer x);
+	//static Integer convert(final Integer x);
 
 }

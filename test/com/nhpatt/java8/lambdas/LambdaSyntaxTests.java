@@ -19,7 +19,7 @@ public class LambdaSyntaxTests {
 			}
 		};
 
-		assertThat(5, equalTo(calculator.add(2, 3)));
+		assertThat(calculator.add(2, 3), equalTo(5));
 	}
 
 	@Test
@@ -28,8 +28,7 @@ public class LambdaSyntaxTests {
 			return x + y;
 		};
 
-		assertThat(5, equalTo(calculator.add(2, 3)));
-		// (int x, int y) -> { return x + y; }
+		assertThat(calculator.add(2, 3), equalTo(5));
 	}
 
 	@Test
@@ -37,15 +36,15 @@ public class LambdaSyntaxTests {
 		final CalculatorInterface calculator = (x, y) -> {
 			return x + y;
 		};
-		assertThat(5, equalTo(calculator.add(2, 3)));
-		// (x, y) -> x + y
+		
+		assertThat(calculator.add(2, 3), equalTo(5));
 	}
 
 	@Test
 	public void implementingInterfaceJava8WayReallyImprovedTest() {
 		final CalculatorInterface calculator = (x, y) -> x + y;
 
-		assertThat(5, equalTo(calculator.add(2, 3)));
+		assertThat(calculator.add(2, 3), equalTo(5));
 	}
 
 	@Test
@@ -70,8 +69,9 @@ public class LambdaSyntaxTests {
 
 	@Test
 	public void implementingOnClickJava8WayImprovedTest() {
-		final ActionListener listener = (message) -> System.out
-				.println(message);
+		final ActionListener listener = (message) -> {
+			System.out.println(message);
+		};
 		listener.onClick("Ack!");
 	}
 
@@ -85,7 +85,7 @@ public class LambdaSyntaxTests {
 	public void functionalInterfaceTest() {
 		final Supplier<String> supplier = "hi"::toUpperCase;
 
-		assertThat("HI", equalTo(supplier.get()));
+		assertThat(supplier.get(), equalTo("HI"));
 	}
 
 }
