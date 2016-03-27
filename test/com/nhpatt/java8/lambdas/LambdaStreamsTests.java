@@ -31,7 +31,7 @@ public class LambdaStreamsTests {
 		coolUsers = Arrays.asList(new User("javier", "gamarra", 10), new User(
 				"pilar", "fraile", 20), new User("david", "hasselhoff", 100));
 
-		numbers = Arrays.asList(new Integer[] { 1, 2, 3, 4, 5, 6 });
+		numbers = Arrays.asList(1, 2, 3, 4, 5, 6);
 		numberOperations = 0;
 	}
 
