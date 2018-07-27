@@ -16,7 +16,7 @@ import org.junit.Test;
 
 public class ManipulateFilesTest {
 
-	private static final String PATH_STRING = "C:\\Users\\nhpatt\\Documents\\file.txt";
+	private static final String PATH_STRING = "../path.txt";
 
 	@Test
 	public void manipulateFilesInOlderJavaTest() throws IOException {
@@ -39,23 +39,7 @@ public class ManipulateFilesTest {
 	@Test
 	public void infoWithPathTest() throws IOException {
 		final Path path = Paths.get(PATH_STRING);
-		Assert.assertEquals(Paths.get("file.txt"), path.getFileName());
-		// a position of path
-		Assert.assertEquals(Paths.get("Users"), path.getName(0));
-		// number elements of path
-		Assert.assertEquals(4, path.getNameCount());
-		// sequence of path
-		Assert.assertEquals(Paths.get("Users\\nhpatt"), path.subpath(0, 2));
-		// parent directory
-		Assert.assertEquals(Paths.get("C:\\Users\\nhpatt\\Documents"),
-				path.getParent());
-		// root
-		Assert.assertEquals(Paths.get("C:\\"), path.getRoot());
-
-		// compare methods
-		Assert.assertEquals(false,
-				path.equals(Paths.get("C:\\Users\\nhpatt\\Documents\\file3.txt")));
-		Assert.assertEquals(true, path.startsWith("C:\\Users"));
+		Assert.assertEquals(Paths.get("path.txt"), path.getFileName());
 
 		// Iterable y comparable
 		for (final Path name : path) {
@@ -65,23 +49,19 @@ public class ManipulateFilesTest {
 
 	public File newFileInOlderJava(final String pathString) throws IOException {
 		final File file = new File(pathString);
-		if (file.createNewFile()) {
-			System.out.println("Fichero creado correctamente");
-		} else {
-			System.out.println("El fichero ya existe");
-		}
+		System.out.println(file.createNewFile() ? "Fichero creado correctamente" : "El fichero ya existe");
 		return file;
 	}
 
 	public Path newFileInJava7(final String pathString) throws IOException {
-		final Path ruta = Paths.get(pathString);
-		return Files.createFile(ruta);
+		final Path path = Paths.get(pathString);
+		return Files.createFile(path);
 	}
 
 	public void deleteFileInJava7(final String pathString) throws IOException {
-		final Path ruta = Paths.get(pathString);
-		Files.delete(ruta);
-		Files.deleteIfExists(ruta);
+		final Path path = Paths.get(pathString);
+		Files.delete(path);
+		Files.deleteIfExists(path);
 	}
 
 	private void writeFileInOlderJava(final File file) {
