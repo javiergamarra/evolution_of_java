@@ -44,9 +44,149 @@ public class DateTests {
 	}
 
 	@Test
+	public void firstMonthStartsAt0Java7Test() {
+		oldDate.set(Calendar.MONTH, Calendar.JANUARY);
+		assertThat(oldDate.get(Calendar.MONTH), equalTo(0));
+	}
+
+	@Test
+	public void firstMonthStartsAt1Test() {
+		assertThat(DayOfWeek.MONDAY.getValue(), equalTo(1));
+	}
+
+	@Test
+	public void createLocalDateTest() {
+
+		LocalDate localDate = LocalDate.of(1984, Month.AUGUST, 8);
+
+		assertThat(localDate.getYear(), equalTo(1984));
+
+		Month month = localDate.getMonth();
+		String monthName = month.getDisplayName(FULL, new Locale("es"));
+		assertThat(monthName, equalTo("agosto"));
+		assertThat(month.getValue(), equalTo(8));
+		assertThat(localDate.getMonthValue(), equalTo(8));
+
+		assertThat(localDate.getDayOfMonth(), equalTo(8));
+
+		assertTrue(localDate.isLeapYear());
+	}
+
+	@Test
+	public void createCurrentLocalDateTest() {
+
+		LocalDate now = LocalDate.now();
+
+		Date date = new Date();
+
+		assertThat(now.getYear(), equalTo(date.getYear() + 1900));
+		assertThat(now.getMonthValue(), equalTo(date.getMonth() + 1));
+		assertThat(now.getDayOfMonth(), equalTo(date.getDate()));
+	}
+
+	@Test
+	public void retrieveValuesWithTemporalFieldsTest() {
+
+		LocalDate localDate = LocalDate.of(1984, Month.AUGUST, 8);
+
+		assertThat(localDate.get(ChronoField.YEAR), equalTo(1984));
+		assertThat(localDate.get(ChronoField.MONTH_OF_YEAR), equalTo(8));
+		assertThat(localDate.get(ChronoField.DAY_OF_MONTH), equalTo(8));
+	}
+
+	@Test
+	public void parseStringDatesTest() {
+
+		LocalDate localDate = LocalDate.parse("1984-08-08");
+
+		assertThat(localDate.get(ChronoField.YEAR), equalTo(1984));
+		assertThat(localDate.get(ChronoField.MONTH_OF_YEAR), equalTo(8));
+		assertThat(localDate.get(ChronoField.DAY_OF_MONTH), equalTo(8));
+	}
+
+	@Test
+	public void createLocalTimeTest() {
+
+		LocalTime localTime = LocalTime.of(20, 30, 0);
+
+		assertThat(localTime.getHour(), equalTo(20));
+		assertThat(localTime.getMinute(), equalTo(30));
+		assertThat(localTime.getSecond(), equalTo(0));
+	}
+
+	@Test
+	public void createLocalDateTimeTest() {
+
+		LocalDateTime localDateTime =
+			LocalDateTime.of(1984, Month.AUGUST, 8, 13, 45, 20);
+
+		assertThat(localDateTime.getYear(), equalTo(1984));
+		assertThat(localDateTime.getMonthValue(), equalTo(8));
+		assertThat(localDateTime.getDayOfMonth(), equalTo(8));
+
+		assertThat(localDateTime.getHour(), equalTo(13));
+		assertThat(localDateTime.getMinute(), equalTo(45));
+		assertThat(localDateTime.getSecond(), equalTo(20));
+	}
+
+
+	@Test
+	public void createAPeriodTest() throws InterruptedException {
+
+		LocalDate start = LocalDate.now().minusDays(1);
+
+		Thread.sleep(1000);
+
+		LocalDate end = LocalDate.now();
+
+		Period between = Period.between(start, end);
+
+		assertThat(between.getDays(), equalTo(1));
+	}
+
+	@Test
+	public void javierIsOldTest() {
+
+		final int age = Period.between(date, LocalDate.now()).getYears();
+
+		assertThat(age, greaterThan(21));
+	}
+
+	@Test
+	public void addTwoDaysToLocalDateTest() {
+
+		LocalDate now = LocalDate.of(2010, 1, 3);
+
+		LocalDate localDate = now.plusDays(2);
+
+		assertThat(localDate.getDayOfMonth(), equalTo(now.getDayOfMonth() + 2));
+
+		LocalDate plus = now.plus(Period.ofDays(2));
+
+		assertThat(plus.getDayOfMonth(), equalTo(now.getDayOfMonth() + 2));
+
+		LocalDate afterTwoDays = now.withDayOfMonth(now.getDayOfMonth() + 2);
+
+		assertThat(
+			afterTwoDays.getDayOfMonth(), equalTo(now.getDayOfMonth() + 2));
+	}
+
+	@Test
+	public void plusDaysTest() {
+		LocalDateTime plusHours5 = dateTime.plusHours(5);
+		LocalDateTime plus5Hours = dateTime.plus(5, HOURS);
+		LocalDateTime plusDuration = dateTime.plus(Duration.of(5, HOURS));
+
+		assertThat(plusHours5.getHour(), equalTo(18));
+		assertThat(plus5Hours.getHour(), equalTo(18));
+		assertThat(plusDuration.getHour(), equalTo(18));
+	}
+
+	@Test
 	public void minusDaysJava7Test() {
-		oldDate.set(Calendar.DAY_OF_YEAR,
-				oldDate.get(Calendar.DAY_OF_YEAR) - 2);
+		oldDate.set(
+			Calendar.DAY_OF_YEAR,
+			oldDate.get(Calendar.DAY_OF_YEAR) - 2);
 
 		assertThat(oldDate.get(Calendar.DAY_OF_MONTH), equalTo(6));
 		assertThat(oldDate.get(Calendar.MONTH), equalTo(7));
@@ -63,14 +203,13 @@ public class DateTests {
 	}
 
 	@Test
-	public void plusDaysTest() {
-		LocalDateTime plusHours5 = dateTime.plusHours(5);
-		LocalDateTime plus5Hours = dateTime.plus(5, HOURS);
-		LocalDateTime plusDuration = dateTime.plus(Duration.of(5, HOURS));
+	public void nextWednesdayTest() {
+		final LocalDate date = LocalDate.of(2013, Month.DECEMBER, 7);
 
-		assertThat(plusHours5.getHour(), equalTo(18));
-		assertThat(plus5Hours.getHour(), equalTo(18));
-		assertThat(plusDuration.getHour(), equalTo(18));
+		final LocalDate nextWednesday = date.with(TemporalAdjusters
+			.next(DayOfWeek.WEDNESDAY));
+
+		assertThat(nextWednesday.getDayOfMonth(), equalTo(11));
 	}
 
 	@Test
