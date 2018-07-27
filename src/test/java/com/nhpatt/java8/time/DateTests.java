@@ -40,7 +40,7 @@ public class DateTests {
 
 		// Date oldDate = new Date(1984, 7, 8);
 		oldDate = GregorianCalendar.getInstance();
-		oldDate.set(1984, 7, 8);
+		oldDate.set(1984, Calendar.AUGUST, 8);
 	}
 
 	@Test
