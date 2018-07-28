@@ -1,16 +1,13 @@
 package com.nhpatt.java8.time;
 
-import static java.time.temporal.ChronoUnit.HOURS;
-import static org.hamcrest.Matchers.allOf;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.number.OrderingComparison.greaterThan;
-import static org.hamcrest.number.OrderingComparison.lessThan;
-import static org.junit.Assert.assertThat;
+import org.junit.Before;
+import org.junit.Test;
 
 import java.text.SimpleDateFormat;
 import java.time.Clock;
 import java.time.DayOfWeek;
 import java.time.Duration;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -20,12 +17,22 @@ import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoField;
 import java.time.temporal.TemporalAdjusters;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.Locale;
 
-import org.junit.Before;
-import org.junit.Test;
+import static java.time.format.TextStyle.FULL;
+import static java.time.temporal.ChronoUnit.HOURS;
+import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.not;
+import static org.hamcrest.number.OrderingComparison.greaterThan;
+import static org.hamcrest.number.OrderingComparison.lessThan;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 
 public class DateTests {
 
@@ -230,11 +237,91 @@ public class DateTests {
 	}
 
 	@Test
+	public void createAnInstantTest() {
+
+		Instant instant = Instant.ofEpochSecond(10);
+
+		assertThat(instant.getEpochSecond(), equalTo(10L));
+	}
+
+	@Test
+	public void createADurationTest() throws InterruptedException {
+
+		Instant start = Instant.now();
+
+		Thread.sleep(1000);
+
+		Instant end = Instant.now();
+
+		Duration between = Duration.between(start, end);
+
+		assertThat(between.getSeconds(), equalTo(1L));
+	}
+
+	@Test
 	public void instantTimeTest() {
 		Long millis = Clock.systemUTC().millis();
 
-		assertThat(System.currentTimeMillis(),
-				allOf(greaterThan(millis - 1000), lessThan(millis + 1000)));
+		assertThat(
+			System.currentTimeMillis(),
+			allOf(greaterThan(millis - 1000), lessThan(millis + 1000)));
+	}
+
+	@Test
+	public void createZonedDateTimeTest() {
+
+		LocalDateTime now = LocalDateTime.now();
+		ZonedDateTime madrid = ZonedDateTime.of(now, ZoneId.of("Europe/Madrid"));
+
+		assertThat(madrid.getDayOfMonth(), equalTo(new Date().getDate()));
+		assertThat(madrid.getHour(), equalTo(new Date().getHours()));
+
+		ZonedDateTime madridInSydney =
+			madrid.withZoneSameInstant(ZoneId.of("Australia/Sydney"));
+
+		assertThat(madridInSydney.getHour(), not(equalTo(madrid.getHour())));
+	}
+
+	@Test
+	public void offsetBetweenTimezonesTest() {
+
+		LocalDateTime now = LocalDateTime.now();
+
+		ZonedDateTime madrid = ZonedDateTime.of(now, ZoneId.of("Europe/Madrid"));
+		ZonedDateTime sydney = ZonedDateTime.of(now, ZoneId.of("Australia/Sydney"));
+
+		assertThat(madrid.getDayOfMonth(), equalTo(sydney.getDayOfMonth()));
+		assertThat(madrid.getHour(), equalTo(sydney.getHour()));
+
+		Duration duration = Duration.between(madrid, sydney);
+
+		assertThat(duration.toHours(), equalTo(-8L));
+	}
+
+	@Test
+	public void flightTimeTest() {
+		final LocalTime dateSpain = LocalTime.of(12, 0);
+		final LocalTime dateNY = LocalTime.of(15, 0);
+		Duration duration = Duration.between(
+			dateSpain.atOffset(ZoneOffset.of("+0")),
+			dateNY.atOffset(ZoneOffset.of("-5")));
+
+		assertThat(duration.toHours(), equalTo(8L));
+	}
+
+	@Test
+	public void flightTimeWithZonedDatesTest() {
+		final LocalTime dateSpain = LocalTime.of(12, 0);
+		final LocalTime dateNY = LocalTime.of(15, 0);
+
+		ZonedDateTime london = ZonedDateTime.of(LocalDate.now(), dateSpain,
+			ZoneId.of("Europe/London"));
+
+		ZonedDateTime newYork = ZonedDateTime.of(LocalDate.now(), dateNY,
+			ZoneId.of("America/New_York"));
+		Duration duration = Duration.between(london, newYork);
+
+		assertThat(duration.toHours(), equalTo(8L));
 	}
 
 	@Test
@@ -252,10 +339,21 @@ public class DateTests {
 	}
 
 	@Test
+	public void formatWithFullLocaleTest() {
+		DateTimeFormatter dateTimeFormatter =
+			DateTimeFormatter.ofPattern(
+				"d 'de' MMMM 'de' yyyy", new Locale("es"));
+
+		String dateText = dateTimeFormatter.format(date);
+
+		assertThat(dateText, equalTo("8 de agosto de 1984"));
+	}
+
+	@Test
 	public void youCanFormatEasilyAsStringJava7Test() {
 		String dateText = String.format("%s-%s-%s", oldDate.get(Calendar.YEAR),
-				oldDate.get(Calendar.MONTH) + 1,
-				oldDate.get(Calendar.DAY_OF_MONTH));
+			oldDate.get(Calendar.MONTH) + 1,
+			oldDate.get(Calendar.DAY_OF_MONTH));
 
 		assertThat(dateText, equalTo("1984-8-8"));
 	}
@@ -263,63 +361,8 @@ public class DateTests {
 	@Test
 	public void youCanFormatEasilyAsStringTest() {
 		String dateText = String.format("%s-%s-%s", date.getYear(),
-				date.getMonthValue(), date.getDayOfMonth());
+			date.getMonthValue(), date.getDayOfMonth());
 
 		assertThat(dateText, equalTo("1984-8-8"));
-	}
-
-	@Test
-	public void firstMonthStartsAt0Java7Test() {
-		oldDate.set(Calendar.MONTH, Calendar.JANUARY);
-		assertThat(oldDate.get(Calendar.MONTH), equalTo(0));
-	}
-
-	@Test
-	public void firstMonthStartsAt1Test() {
-		assertThat(DayOfWeek.MONDAY.getValue(), equalTo(1));
-	}
-
-	@Test
-	public void javierIsOldTest() {
-
-		final int age = Period.between(date, LocalDate.now()).getYears();
-
-		assertThat(age, greaterThan(21));
-	}
-
-	@Test
-	public void nextWednesdayTest() {
-		final LocalDate date = LocalDate.of(2013, Month.DECEMBER, 7);
-
-		final LocalDate nextWednesday = date.with(TemporalAdjusters
-				.next(DayOfWeek.WEDNESDAY));
-
-		assertThat(nextWednesday.getDayOfMonth(), equalTo(11));
-	}
-
-	@Test
-	public void flightTimeTest() {
-		final LocalTime dateSpain = LocalTime.of(12, 00);
-		final LocalTime dateNY = LocalTime.of(15, 00);
-		Duration duration = Duration.between(
-				dateSpain.atOffset(ZoneOffset.of("+0")),
-				dateNY.atOffset(ZoneOffset.of("-5")));
-
-		assertThat(duration.toHours(), equalTo(8L));
-	}
-
-	@Test
-	public void flightTimeWithZonedDatesTest() {
-		final LocalTime dateSpain = LocalTime.of(12, 00);
-		final LocalTime dateNY = LocalTime.of(15, 00);
-
-		ZonedDateTime london = ZonedDateTime.of(LocalDate.now(), dateSpain,
-				ZoneId.of("Europe/London"));
-
-		ZonedDateTime newYork = ZonedDateTime.of(LocalDate.now(), dateNY,
-				ZoneId.of("America/New_York"));
-		Duration duration = Duration.between(london, newYork);
-
-		assertThat(duration.toHours(), equalTo(8L));
 	}
 }
