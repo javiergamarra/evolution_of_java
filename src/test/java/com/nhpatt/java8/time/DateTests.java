@@ -136,27 +136,16 @@ public class DateTests {
 		assertThat(localDateTime.getSecond(), equalTo(20));
 	}
 
-
 	@Test
-	public void createAPeriodTest() throws InterruptedException {
+	public void createAPeriodTest() {
 
-		LocalDate start = LocalDate.now().minusDays(1);
+		LocalDate start = LocalDate.ofYearDay(2018, 181);
 
-		Thread.sleep(1000);
-
-		LocalDate end = LocalDate.now();
+		LocalDate end = LocalDate.of(2018, 7, 30);
 
 		Period between = Period.between(start, end);
 
-		assertThat(between.getDays(), equalTo(1));
-	}
-
-	@Test
-	public void javierIsOldTest() {
-
-		final int age = Period.between(date, LocalDate.now()).getYears();
-
-		assertThat(age, greaterThan(21));
+		assertThat(between.getDays(), equalTo(0));
 	}
 
 	@Test
@@ -220,6 +209,15 @@ public class DateTests {
 	}
 
 	@Test
+	public void javierIsOldTest() {
+
+		final int age = Period.between(date, LocalDate.now()).getYears();
+
+		assertThat(age, greaterThan(21));
+	}
+
+
+	@Test
 	public void atStartOfDayJava7Test() {
 		oldDate.set(Calendar.HOUR_OF_DAY, 0);
 		oldDate.set(Calendar.MINUTE, 0);
@@ -260,6 +258,7 @@ public class DateTests {
 
 	@Test
 	public void instantTimeTest() {
+
 		Long millis = Clock.systemUTC().millis();
 
 		assertThat(
@@ -299,17 +298,6 @@ public class DateTests {
 	}
 
 	@Test
-	public void flightTimeTest() {
-		final LocalTime dateSpain = LocalTime.of(12, 0);
-		final LocalTime dateNY = LocalTime.of(15, 0);
-		Duration duration = Duration.between(
-			dateSpain.atOffset(ZoneOffset.of("+0")),
-			dateNY.atOffset(ZoneOffset.of("-5")));
-
-		assertThat(duration.toHours(), equalTo(8L));
-	}
-
-	@Test
 	public void flightTimeWithZonedDatesTest() {
 		final LocalTime dateSpain = LocalTime.of(12, 0);
 		final LocalTime dateNY = LocalTime.of(15, 0);
@@ -320,6 +308,17 @@ public class DateTests {
 		ZonedDateTime newYork = ZonedDateTime.of(LocalDate.now(), dateNY,
 			ZoneId.of("America/New_York"));
 		Duration duration = Duration.between(london, newYork);
+
+		assertThat(duration.toHours(), equalTo(8L));
+	}
+
+	@Test
+	public void flightTimeTest() {
+		final LocalTime dateSpain = LocalTime.of(12, 0);
+		final LocalTime dateNY = LocalTime.of(15, 0);
+		Duration duration = Duration.between(
+			dateSpain.atOffset(ZoneOffset.of("+0")),
+			dateNY.atOffset(ZoneOffset.of("-5")));
 
 		assertThat(duration.toHours(), equalTo(8L));
 	}
@@ -365,4 +364,5 @@ public class DateTests {
 
 		assertThat(dateText, equalTo("1984-8-8"));
 	}
+
 }
