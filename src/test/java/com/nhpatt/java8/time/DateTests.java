@@ -18,6 +18,7 @@ import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoField;
+import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalAdjusters;
 import java.util.Calendar;
 import java.util.Date;
@@ -146,6 +147,18 @@ public class DateTests {
 		Period between = Period.between(start, end);
 
 		assertThat(between.getDays(), equalTo(0));
+	}
+
+	@Test
+	public void calculateDaysBetweenDatesTest() {
+
+		LocalDate start = LocalDate.ofYearDay(2018, 181);
+
+		LocalDate end = LocalDate.of(2017, 7, 31);
+
+		long days = ChronoUnit.DAYS.between(start, end);
+
+		assertThat(days, equalTo(-334L));
 	}
 
 	@Test
